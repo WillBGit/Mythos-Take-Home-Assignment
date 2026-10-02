@@ -55,7 +55,7 @@ function generateCoverLetter(rowNumber, first_name, last_name, company, address,
     });
 
     doc.moveDown();
-    doc.fontSize(textSize).text('I am writing to express my strong interest in the Programmer position at ' + company + '. With a solid background in programming, I am excited about the opportunity to contribute to your team' +  "'s " + 'success and further develop my career', {
+    doc.fontSize(textSize).text('I am writing to express my strong interest in the Programmer position at ' + company + '. With a solid background in programming, I am excited about the opportunity to contribute to your team' +  "'s " + 'success and further develop my career.', {
         width: width,
         align: 'center',
         lineGap: lineGap,
