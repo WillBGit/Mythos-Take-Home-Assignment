@@ -22,7 +22,7 @@ const PersonalInfo = JSON.parse(PersonalInfoJson);
 function generateCoverLetter(first_name, last_name, company, address, city, state, zip) {
     const doc = new PDFDocument({font: 'Courier'});
     const output = path.join(__dirname, 'output');
-    const outputFile = path.join(output, 'CoverLetter' + first_name + last_name + '.pdf');
+    const outputFile = path.join(output, 'Cover Letter ' + first_name + ' ' + last_name + '.pdf');
     doc.pipe(fs.createWriteStream(outputFile));
 
     doc.fontSize(textSize).text(company, {
