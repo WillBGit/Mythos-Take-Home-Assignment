@@ -4,18 +4,9 @@ const path = require('path');
 const {execSync} = require('child_process');
 const textSize = 12;
 const lineGap = 4;
-const width = 400;
-const first_name = '';
-const last_name = '';
-const email = '';
-const gender = '';
-const job_title = '';
-const company = '';
-const address = '';
-const city = '';
-const state = '';
-const zip = '';
+const width = 450;
 
+// Run the python script to read in the csv file and update the data.json file with the relevant data for each person in the csv file. This is done so that the pdfConverter.js script can read in the data.json file and generate a cover letter for each person in the csv file.
 execSync('python csvReader.py', (error, stdout, stderr) => {
     if (error) {
         console.error(`error with python script: ${error.message}`);
@@ -23,15 +14,17 @@ execSync('python csvReader.py', (error, stdout, stderr) => {
     }
 });
 
-const PersonalInfoJson = fs.readFileSync('data.json');
-const PersonalInfo = JSON.parse(PersonalInfoJson);
+// Read and parse the data.json file into a dictionary with the relevant data for each person.
+const personalInfoJson = fs.readFileSync('data.json');
+const personalInfo = JSON.parse(personalInfoJson);
 
-
+// Generate a cover letter for each peron using the data from the parsed dictionary. Also adds embedded data to each cover letter with time created and the relevant json data. Then, send the generated cover letter to the output folder.
 function generateCoverLetter(first_name, last_name, company, address, city, state, zip) {
     const doc = new PDFDocument({font: 'Courier'});
     const output = path.join(__dirname, 'output');
     const embeddedData = {first_name, last_name, company, address, city, state, zip};
     const outputFile = path.join(output, 'Cover Letter ' + first_name + ' ' + last_name + '.pdf');
+
     doc.file(Buffer.from(JSON.stringify(embeddedData, null, 2)), {
         name: first_name + ' ' + last_name + ' Cover Letter.json',
         type: 'application/json',
@@ -108,9 +101,9 @@ function generateCoverLetter(first_name, last_name, company, address, city, stat
     doc.end();
 }
 
-
+// Run the generateCoverLetter function for each person in the personalInfo dictionary.
 function main() {
-    for (const [rowNumber, person] of Object.entries(PersonalInfo)) {
+    for (const [rowNumber, person] of Object.entries(personalInfo)) {
         generateCoverLetter(person.first_name, person.last_name, person.company, person.address, person.city, person.state, person.zip);
     }
 }
