@@ -7,18 +7,18 @@ const lineGap = 4;
 const width = 450;
 
 // Run the python script to read in the csv file and update the data.json file with the relevant data for each person in the csv file. This is done so that the pdfConverter.js script can read in the data.json file and generate a cover letter for each person in the csv file.
-execSync('python csvReader.py', (error, stdout, stderr) => {
-    if (error) {
-        console.error(`error with python script: ${error.message}`);
-            return;
-    }
-});
+try {
+    execSync('python csvReader.py');
+} catch (error) {
+    console.error(`error with python script: ${error.message}`);
+    process.exit(1);
+}
 
 // Read and parse the data.json file into a dictionary with the relevant data for each person.
 const personalInfoJson = fs.readFileSync('data.json');
 const personalInfo = JSON.parse(personalInfoJson);
 
-// Generate a cover letter for each peron using the data from the parsed dictionary. Also adds embedded data to each cover letter with time created and the relevant json data. Then, send the generated cover letter to the output folder.
+// Generate a cover letter for each person using the data from the parsed dictionary. Also adds embedded data to each cover letter with time created and the relevant json data. Then, send the generated cover letter to the output folder.
 function generateCoverLetter(rowNumber, first_name, last_name, company, address, city, state, zip) {
     const doc = new PDFDocument({font: 'Courier'});
     const output = path.join(__dirname, 'output');
@@ -55,30 +55,37 @@ function generateCoverLetter(rowNumber, first_name, last_name, company, address,
     });
 
     doc.moveDown();
+    doc.fontSize(textSize).text('Dear ' + first_name + ' ' + last_name + ',', {
+        width: width,
+        align: 'left',
+        lineGap: lineGap,
+    });
+
+    doc.moveDown();
     doc.fontSize(textSize).text('I am writing to express my strong interest in the Programmer position at ' + company + '. With a solid background in programming, I am excited about the opportunity to contribute to your team' +  "'s " + 'success and further develop my career.', {
         width: width,
-        align: 'center',
+        align: 'left',
         lineGap: lineGap,
     });
 
     doc.moveDown();
     doc.fontSize(textSize).text('Throughout my academic and professional journey, I have honed my skills in JavaScript, which I believe aligns well with the requirements of the Programmer role.', {
         width: width,
-        align: 'center',
+        align: 'left',
         lineGap: lineGap,
     });
 
     doc.moveDown();
     doc.fontSize(textSize).text('What excites me most about ' + company + ' is its reputation for solving complex business problems with technological solutions. I am inspired by your innovative approach, and I am eager to contribute my skills to help ' + company + ' achieve its mission.', {
         width: width,
-        align: 'center',
+        align: 'left',
         lineGap: lineGap,
     });
 
     doc.moveDown();
     doc.fontSize(textSize).text('Thank you for considering my application. I look forward to the possibility of contributing to ' + company + "'" + 's ongoing success. ', {
         width: width,
-        align: 'center',
+        align: 'left',
         lineGap: lineGap,
     });
 
@@ -90,7 +97,7 @@ function generateCoverLetter(rowNumber, first_name, last_name, company, address,
     });
 
     doc.moveDown();
-    doc.fontSize(textSize).text(first_name + ' ' + last_name, {
+    doc.fontSize(textSize).text('William Borello', {
         width: width,
         align: 'left',
         lineGap: lineGap,
