@@ -19,11 +19,11 @@ const personalInfoJson = fs.readFileSync('data.json');
 const personalInfo = JSON.parse(personalInfoJson);
 
 // Generate a cover letter for each peron using the data from the parsed dictionary. Also adds embedded data to each cover letter with time created and the relevant json data. Then, send the generated cover letter to the output folder.
-function generateCoverLetter(first_name, last_name, company, address, city, state, zip) {
+function generateCoverLetter(rowNumber, first_name, last_name, company, address, city, state, zip) {
     const doc = new PDFDocument({font: 'Courier'});
     const output = path.join(__dirname, 'output');
-    const embeddedData = {first_name, last_name, company, address, city, state, zip};
-    const outputFile = path.join(output, 'Cover Letter ' + first_name + ' ' + last_name + '.pdf');
+    const embeddedData = {rowNumber, first_name, last_name, company, address, city, state, zip};
+    const outputFile = path.join(output, 'Cover Letter ' + first_name + ' ' + last_name + '-' + rowNumber + '.pdf');
 
     doc.file(Buffer.from(JSON.stringify(embeddedData, null, 2)), {
         name: first_name + ' ' + last_name + ' Cover Letter.json',
@@ -104,7 +104,7 @@ function generateCoverLetter(first_name, last_name, company, address, city, stat
 // Run the generateCoverLetter function for each person in the personalInfo dictionary.
 function main() {
     for (const [rowNumber, person] of Object.entries(personalInfo)) {
-        generateCoverLetter(person.first_name, person.last_name, person.company, person.address, person.city, person.state, person.zip);
+        generateCoverLetter(rowNumber, person.first_name, person.last_name, person.company, person.address, person.city, person.state, person.zip);
     }
 }
 

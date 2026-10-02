@@ -1,8 +1,6 @@
 import csv
 import json 
 
-from pymupdf import name
-
 # Data type to store the relevant data from a single row of the csv file.
 class person:
     def __init__(self, first_name: str, last_name: str, email: str, gender: str, job_title: str, company: str, address: str, city: str, state: str, zip: str):
