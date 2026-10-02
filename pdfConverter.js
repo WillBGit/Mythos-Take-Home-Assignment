@@ -1,6 +1,7 @@
 const { PDFDocument } = require('pdfkit');
 const fs = require('fs');
 const path = require('path');
+const {execSync} = require('child_process');
 const textSize = 12;
 const lineGap = 4;
 const width = 400;
@@ -15,6 +16,13 @@ const city = '';
 const state = '';
 const zip = '';
 
+execSync('python csvReader.py', (error, stdout, stderr) => {
+    if (error) {
+        console.error(`error with python script: ${error.message}`);
+            return;
+    }
+});
+
 const PersonalInfoJson = fs.readFileSync('data.json');
 const PersonalInfo = JSON.parse(PersonalInfoJson);
 
@@ -22,7 +30,17 @@ const PersonalInfo = JSON.parse(PersonalInfoJson);
 function generateCoverLetter(first_name, last_name, company, address, city, state, zip) {
     const doc = new PDFDocument({font: 'Courier'});
     const output = path.join(__dirname, 'output');
+    const embeddedData = {first_name, last_name, company, address, city, state, zip};
     const outputFile = path.join(output, 'Cover Letter ' + first_name + ' ' + last_name + '.pdf');
+    doc.file(Buffer.from(JSON.stringify(embeddedData, null, 2)), {
+        name: first_name + ' ' + last_name + ' Cover Letter.json',
+        type: 'application/json',
+        creationDate: new Date(),
+        modifiedDate: new Date(),
+        description: 'data for cover letter for ' + first_name + ' ' + last_name + ' to ' + company,
+        });
+    
+
     doc.pipe(fs.createWriteStream(outputFile));
 
     doc.fontSize(textSize).text(company, {
@@ -44,7 +62,7 @@ function generateCoverLetter(first_name, last_name, company, address, city, stat
     });
 
     doc.moveDown();
-    doc.fontSize(textSize).text('I am writing to express my strong interest in the Programmer position at ' + company + '. With a solid background in programming, I am excited about the opportunity to contribute to your teams success and further develop my career', {
+    doc.fontSize(textSize).text('I am writing to express my strong interest in the Programmer position at ' + company + '. With a solid background in programming, I am excited about the opportunity to contribute to your team' +  "'s " + 'success and further develop my career', {
         width: width,
         align: 'center',
         lineGap: lineGap,
@@ -65,7 +83,7 @@ function generateCoverLetter(first_name, last_name, company, address, city, stat
     });
 
     doc.moveDown();
-    doc.fontSize(textSize).text('Thank you for considering my application. I look forward to the possibility of contributing to ' + company + 's ongoing success. ', {
+    doc.fontSize(textSize).text('Thank you for considering my application. I look forward to the possibility of contributing to ' + company + "'" + 's ongoing success. ', {
         width: width,
         align: 'center',
         lineGap: lineGap,
