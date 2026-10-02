@@ -29,6 +29,8 @@ const PersonalInfo = JSON.parse(PersonalInfoJson);
 
 function generateCoverLetter(first_name, last_name, company, address, city, state, zip) {
     const doc = new PDFDocument({font: 'Courier'});
+    doc.registerFont('Roboto', path.join(__dirname, 'fonts/Roboto/static', 'Roboto-Regular.ttf'));
+    doc.font('Roboto');
     const output = path.join(__dirname, 'output');
     const embeddedData = {first_name, last_name, company, address, city, state, zip};
     const outputFile = path.join(output, 'Cover Letter ' + first_name + ' ' + last_name + '.pdf');
