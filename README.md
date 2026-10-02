@@ -1,4 +1,4 @@
-﻿# Take-Home-Assignment
+﻿# Take-Home-Assignment: William Borello
 
 The program I have created is a simple pdf converter that turns a csv file into a list of pdf cover letters for the specified companies and individuals in the file. In general when setting out to do this assignment, I wanted to focus on a generally simple solution without compromising too much efficiency. Given the time constraint having a system that would be feasible to implement and easy to debug was paramount. As well, given the focus on a joint python and javascript framework that was discussed during the first round of interviews, I felt it would be prudent to show my ability to use those languages in tandem. The general flow of this will be defined below.
 
