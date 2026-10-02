@@ -4,22 +4,23 @@ const textSize = 12;
 const lineGap = 4;
 const width = 400;
 
+
 const doc = new PDFDocument({font: 'Courier'});
 doc.pipe(fs.createWriteStream('CoverLetter.pdf'));
 
-doc.fontSize(textSize).text('[company name]', {
+doc.fontSize(textSize).text(PersonalInfo.companyName, {
     width: width,
     align: 'left',
     lineGap: lineGap,
 });
 
-doc.fontSize(textSize).text('[Address]', {
+doc.fontSize(textSize).text(PersonalInfo.address, {
     width: width,
     align: 'left',
     lineGap: lineGap,
 });
 
-doc.fontSize(textSize).text('[City, State Zip]', {
+doc.fontSize(textSize).text(PersonalInfo.cityStateZip, {
     width: width,
     align: 'left',
     lineGap: lineGap,

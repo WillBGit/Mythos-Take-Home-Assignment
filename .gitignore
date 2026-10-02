@@ -1,0 +1,8 @@
+node_modules/
+_pychache_/
+.venv/
+data.json
+Revify-Sample-Leads.csv
+Thumbs.db
+.vscode/
+.DS_Store
